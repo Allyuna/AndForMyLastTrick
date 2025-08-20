@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AND FOR MY LAST TRICK – Brief Agents</title>
+<style>
+  :root{
+    --bg:#0b0f13; --panel:#121821; --ink:#e6edf3; --muted:#9aa4af; --accent:#20e3b2; --warn:#ff6b6b;
+    --code:#0a0; --lock:#ffd166;
+  }
+  body{margin:0;font-family:ui-monospace, monospace;background:#0b0f13;color:var(--ink)}
+  .wrap{max-width:900px;margin:0 auto;padding:24px}
+  .card{background:#121821;padding:20px;border-radius:10px;margin-top:20px}
+  h1,h2,h3{color:var(--accent)}
+  select,input,button{padding:8px;margin-top:6px;width:100%;border-radius:6px;border:1px solid #333;background:#0b0f13;color:var(--ink)}
+  button{cursor:pointer;background:#20e3b2;color:#000;font-weight:bold}
+  .err{color:var(--warn);margin-top:8px}
+  .ok{color:var(--accent);margin-top:8px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AND FOR MY LAST TRICK…</h1>
+  <section id="intro" class="card">
+    <p><strong>Ordre de mission</strong> : identifiez-vous puis confirmez votre date d’arrivée à l’Agence.</p>
+    <label for="agent">Je suis…</label>
+    <select id="agent">
+      <option value="" selected disabled>Choisir un agent</option>
+      <option value="sam">Sam</option>
+      <option value="camille">Camille</option>
+      <option value="maxence">Maxence</option>
+      <option value="juliette">Juliette</option>
+      <option value="romane">Romane</option>
+      <option value="clemence">Clémence</option>
+      <option value="nat">Nat</option>
+    </select>
+    <label for="startDate">Date d’arrivée</label>
+    <input id="startDate" type="text" placeholder="ex : 12/10/2023 · 12 octobre 2023">
+    <button id="validate">Valider</button>
+    <div id="errIntro" class="err hidden"></div>
+  </section>
+
+  <section id="profile" class="card hidden">
+    <h2 id="agentTitle">Agent</h2>
+    <div id="seniority"></div>
+    <h3>Interrogatoire</h3>
+    <ol id="quiz"></ol>
+    <button id="checkQuiz">Soumettre les réponses</button>
+    <div id="quizMsg" class="err hidden"></div>
+    <div id="reward" class="hidden">
+      <h3>Accès accordé</h3>
+      <p>Lieu de fouille : <span id="digHint"></span></p>
+    </div>
+  </section>
+</div>
+
+<script>
+const AGENTS = {
+  sam:      { label:"Sam",      start:"2023-10-12", dig:"Sous le bureau du GM, côté gauche." },
+  camille:  { label:"Camille",  start:"2022-09-08", dig:"Sous le zip de la chaise n°2." },
+  maxence:  { label:"Maxence",  start:"2025-03-29", dig:"Tiroir 3, salle préférée." },
+  juliette: { label:"Juliette", start:"2024-08-24", dig:"Enveloppe collée sous le comptoir." },
+  romane:   { label:"Romane",   start:"2025-05-09", dig:"Derrière l’affiche de la salle favorite." },
+  clemence: { label:"Clémence", start:"2025-05-09", dig:"Sous le zip de la chaise n°4." },
+  nat:      { label:"Nat",      start:"2017-02-24", dig:"Enveloppe sous le bureau technique." }
+};
+
+const QUESTION_BANK = [
+  { q:"Date de création de l’Agence Wake Up ?", answers:["24/02/2017","24-02-2017","24 02 2017","24 fevrier 2017","24 février 2017","24 february 2017","feb 24 2017","2017-02-24"], norm:"2017-02-24" },
+  { q:"Première salle ouverte à Wake Up ?", answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"] },
+  { q:"Quelle salle a été récompensée aux Escape Awards en 2019 ?", answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"] },
+  { q:"Nombre d’années de service de l’Agent A ?", answers:["6","six"] },
+  { q:"Logiciel utilisé pour les plannings ?", answers:["4escape"] },
+  { q:"Vrai ou Faux – Axomama est la déesse de la pomme de terre pour les Incas ?", answers:["vrai","true"] },
+  { q:"Vrai ou Faux – Une joueuse s’est déjà cassé une dent dans Psychose ?", answers:["vrai","true"] },
+  { q:"Vrai ou Faux – Un joueur a déjà fait pipi dans Inti Kancha ?", answers:["vrai","true"] },
+  { q:"Vrai ou Faux – On a eu 3 demandes en mariage à l’Agence ?", answers:["vrai","true"] },
+  { q:"Combien d’Agents au total ont été recrutés depuis le début de l’Agence ?", answers:["48"] },
+  { q:"Quel pays détient le record mondial du plus grand escape game (30 000 m²) ?", answers:["chine","china"] },
+  { q:"En quelle année est sorti le film Escape Room au cinéma ?", answers:["2019"] },
+  { q:"Dans quelle salle es-tu propice à t’enfermer pendant ton rangement ?", answers:["protocole vegas","vegas"] },
+  { q:"Quel est le pays de naissance des Escape Games ?", answers:["japon","japan"] },
+  { q:"Quelle est la salle la plus réservée depuis l’ouverture de Wake Up ?", answers:["contagion"] },
+  { q:"Qui a le cri le plus terrifiant de Wake Up ?", answers:["sam","agent sam","camille bahougne"] },
+  { q:"Quelle est la salle la plus longue à ranger ?", answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"] },
+  { q:"Quelle est la salle où les joueurs pètent le plus ?", answers:["psychose"] },
+  { q:"Dans quelle salle y a-t-il des thermos coupées en deux pour faire des charnières ?", answers:["protocole vegas","vegas"] },
+  { q:"Quelle salle contient le plus de codes à chiffres ?", answers:["contagion"] },
+  { q:"1er avril 2023, l’agent Victor a annoncé de fausses salles. Donne le nom d’une d’entre elles.", answers:["protocole vegan","contafion","l'affaire blackpoule","laffaire blackpoule","arthrose","et et la plancha","et la plancha"] }
+];
+
+function normalize(str){
+  return (str||"").toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'').trim();
+}
+function parseFlexibleDate(input){
+  const s = normalize(input);
+  let m;
+  if ((m = s.match(/^(\d{4})[-\/ ](\d{1,2})[-\/ ](\d{1,2})$/))) {
+    const [_,Y,M,D]=m; return `${Y}-${String(M).padStart(2,'0')}-${String(D).padStart(2,'0')}`;
+  }
+  if ((m = s.match(/^(\d{1,2})[-\/ ](\d{1,2})[-\/ ](\d{2,4})$/))) {
+    let [_,D,M,Y]=m; if (Y.length===2) Y="20"+Y; return `${Y}-${String(M).padStart(2,'0')}-${String(D).padStart(2,'0')}`;
+  }
+  return null;
+}
+
+const intro=document.getElementById("intro"), profile=document.getElementById("profile");
+document.getElementById("validate").addEventListener("click",()=>{
+  const key=document.getElementById("agent").value;
+  const raw=document.getElementById("startDate").value;
+  if(!key||!raw){showErr("Sélectionnez un agent et entrez une date.");return;}
+  const iso=parseFlexibleDate(raw);
+  if(!iso){showErr("Format non reconnu.");return;}
+  if(AGENTS[key].start!==iso){showErr("Date invalide pour cet agent.");return;}
+  intro.classList.add("hidden"); loadProfile(key);
+});
+function showErr(msg){const e=document.getElementById("errIntro");e.textContent=msg;e.classList.remove("hidden");}
+
+function loadProfile(key){
+  const A=AGENTS[key];
+  document.getElementById("agentTitle").textContent="Agent "+A.label;
+  document.getElementById("seniority").textContent="Ancienneté depuis "+A.start;
+  const pool=QUESTION_BANK.sort(()=>Math.random()-0.5).slice(0,3);
+  const list=document.getElementById("quiz"); list.innerHTML="";
+  pool.forEach((item,i)=>{
+    const li=document.createElement("li");
+    li.innerHTML=`<div>${item.q}</div><input type="text" id="q_${i}">`;
+    list.appendChild(li);
+  });
+  document.getElementById("checkQuiz").onclick=()=>{
+    let ok=true; pool.forEach((item,i)=>{
+      const val=normalize(document.getElementById("q_"+i).value);
+      if(item.norm){const iso=parseFlexibleDate(val); if(iso!==item.norm) ok=false;}
+      else{ if(!item.answers.some(a=>normalize(a)===val)) ok=false; }
+    });
+    const msg=document.getElementById("quizMsg");
+    if(!ok){msg.textContent="Mauvaise réponse.";msg.classList.remove("hidden");msg.classList.remove("ok");return;}
+    msg.textContent="Réponses correctes.";msg.classList.remove("hidden");msg.classList.add("ok");
+    document.getElementById("digHint").textContent=A.dig;
+    document.getElementById("reward").classList.remove("hidden");
+  };
+}
+</script>
+</body>
+</html>

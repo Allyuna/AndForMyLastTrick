@@ -217,26 +217,31 @@ function buildPattern(agent){
 
   grid.innerHTML = '';
   const nodes = [];
-  for(let i=0;i<25;i++){
-    const d=document.createElement('div');
-    d.className='pat-node';
-    d.dataset.idx=i;
+  for (let i=0;i<25;i++){
+    const d = document.createElement('div');
+    d.className = 'pat-node';
+    d.dataset.idx = i;
     grid.appendChild(d);
     nodes.push(d);
   }
 
-  const canvas=document.createElement('canvas');
-  canvas.className='pat-canvas';
+  const canvas = document.createElement('canvas');
+  canvas.className = 'pat-canvas';
   grid.appendChild(canvas);
-  const ctx=canvas.getContext('2d');
+  const ctx = canvas.getContext('2d');
 
-  function resize(){ canvas.width=grid.clientWidth; canvas.height=grid.clientHeight; }
+  function resize(){
+    const r = grid.getBoundingClientRect();
+    canvas.width = r.width; canvas.height = r.height;
+  }
   new ResizeObserver(resize).observe(grid);
+  resize();
 
-  let active=false, path=[];
+  let active = false, path = [];
+
   function center(el){
-    const r=el.getBoundingClientRect(), g=grid.getBoundingClientRect();
-    return {x:r.left-g.left+r.width/2,y:r.top-g.top+r.height/2};
+    const r = el.getBoundingClientRect(), g = grid.getBoundingClientRect();
+    return { x: r.left - g.left + r.width/2, y: r.top - g.top + r.height/2 };
   }
   function clearDraw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -244,49 +249,91 @@ function buildPattern(agent){
   }
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.lineWidth=3; ctx.strokeStyle='#20e3b2'; ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.lineWidth = 3; ctx.strokeStyle = '#20e3b2';
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.beginPath();
-    path.forEach((idx,k)=>{ const c=center(nodes[idx]); if(k===0) ctx.moveTo(c.x,c.y); else ctx.lineTo(c.x,c.y); });
+    path.forEach((idx,k)=>{
+      const c = center(nodes[idx]);
+      if (k===0) ctx.moveTo(c.x,c.y); else ctx.lineTo(c.x,c.y);
+    });
     ctx.stroke();
     path.forEach(idx=>nodes[idx].classList.add('on'));
   }
-  function idxFrom(ev){
-    const t = (ev.target && ev.target.closest)? ev.target.closest('.pat-node') : null;
-    return t ? +t.dataset.idx : -1;
-  }
-  function start(ev){ ev.preventDefault(); active=true; path=[]; clearDraw(); maybeAdd(ev); }
-  function move(ev){ if(!active) return; maybeAdd(ev); }
-  function end(){ if(!active) return; active=false; validate(); }
 
-  function maybeAdd(ev){
-    const i = idxFrom(ev);
-    if(i<0) return;
-    if(path[path.length-1]===i) return;
-    path.push(i); draw();
+  function idxFromTarget(t){
+    const n = t && t.closest ? t.closest('.pat-node') : null;
+    return n ? +n.dataset.idx : -1;
+  }
+
+  function startFromTarget(t){
+    active = true; path = []; clearDraw();
+    maybeAddTarget(t);
+  }
+  function moveFromTarget(t){
+    if (!active) return;
+    maybeAddTarget(t);
+  }
+  function endStroke(){
+    if (!active) return;
+    active = false; validate();
+  }
+
+  function maybeAddTarget(t){
+    const idx = idxFromTarget(t);
+    if (idx < 0) return;
+    if (path[path.length-1] === idx) return;
+    path.push(idx); draw();
   }
 
   // Souris
-  grid.addEventListener('mousedown',start);
-  grid.addEventListener('mousemove',move);
-  window.addEventListener('mouseup',end);
-  // Tactile
-  // Tactile
-grid.addEventListener('touchstart', e=>{
-  e.preventDefault();
-  const t = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-  start({target:t});
-},{passive:false});
+  grid.addEventListener('mousedown', e=>{ e.preventDefault(); startFromTarget(e.target); });
+  grid.addEventListener('mousemove', e=>{ moveFromTarget(e.target); });
+  window.addEventListener('mouseup', ()=> endStroke());
 
-grid.addEventListener('touchmove', e=>{
-  e.preventDefault();
-  const t = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-  move({target:t});
-},{passive:false});
+  // Tactile (document.elementFromPoint)
+  grid.addEventListener('touchstart', e=>{
+    e.preventDefault();
+    const t = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    startFromTarget(t);
+  }, {passive:false});
+  grid.addEventListener('touchmove', e=>{
+    e.preventDefault();
+    const t = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    moveFromTarget(t);
+  }, {passive:false});
+  grid.addEventListener('touchend', e=>{
+    e.preventDefault();
+    endStroke();
+  }, {passive:false});
 
-grid.addEventListener('touchend', e=>{
-  e.preventDefault();
-  end();
-},{passive:false});
+  function normalize(a){ const out=[]; for(const v of a){ if(out[out.length-1]!==v) out.push(v); } return out; }
+  function same(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
+
+  // Pattern plus difficile (zigzags). Mets le même qu’en config globale si tu centralises.
+  const SECRET_PATTERN = [1,2,7,6,11,12,17,18,23,24,19,14,9,8,3,4,0];
+
+  function validate(){
+    const ok = same(normalize(path), SECRET_PATTERN);
+    if (!ok){
+      patMsg.textContent = "Schéma non validé. Réessaie.";
+      patMsg.classList.remove('hidden');
+      patMsg.classList.remove('ok');
+      grid.classList.add('shake'); setTimeout(()=>grid.classList.remove('shake'),250);
+      clearDraw(); path = [];
+      return;
+    }
+    patMsg.textContent = "Schéma validé.";
+    patMsg.classList.remove('hidden');
+    patMsg.classList.add('ok');
+    toPlan.classList.remove('hidden');
+  }
+
+  toPlan.onclick = ()=>{
+    document.getElementById('pattern').classList.add('hidden');
+    preparePlan(agent);
+    document.getElementById('plan').classList.remove('hidden');
+  };
+}
 
 
 

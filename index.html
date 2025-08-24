@@ -68,7 +68,7 @@
       <div>
         <label for="startDate">Date d’arrivée</label>
         <input id="startDate" type="text" placeholder="ex : 12/02/1999 · 12 Février 1999 · 12 fev 99">
-        <div class="hint">Accents tolérés. Formats FR/EN ok. Ex : “12 Février 1999”, “212/02/1999”.</div>
+        <div class="hint">Accents tolérés. Formats FR/EN ok. Ex : “12 Février 1999”, “12/02/1999”.</div>
       </div>
       <div>
         <button id="validate">Valider &gt; Dossier Agent</button>
@@ -103,20 +103,19 @@
       <p class="mono">Lieu de fouille pour <span id="who"></span> : <span id="digHint" class="code">—</span></p>
     </div>
 
-    <div class="foot">Ajoutez photos et détails dans <code>/assets/</code>. Les champs couverture/spécialité sont à personnaliser.</div>
   </section>
 </div>
 
 <script>
 /* ======= Données Agents ======= */
 const AGENTS = {
-  sam:      { label:"Sam",      start:"2023-10-12", photo:"/assets/sam.jpg",      cover:"—", spec:"—", dig:"Sous le bureau du GM, côté gauche." },
-  camille:  { label:"Camille",  start:"2022-09-08", photo:"/assets/camille.jpg",  cover:"—", spec:"—", dig:"Sous le zip de la chaise n°2." },
-  maxence:  { label:"Maxence",  start:"2025-03-29", photo:"/assets/maxence.jpg",  cover:"—", spec:"—", dig:"Tiroir 3, salle préférée." },
-  juliette: { label:"Juliette", start:"2024-08-24", photo:"/assets/juliette.jpg", cover:"—", spec:"—", dig:"Enveloppe collée sous le comptoir." },
-  romane:   { label:"Romane",   start:"2025-05-09", photo:"/assets/romane.jpg",   cover:"—", spec:"—", dig:"Derrière l’affiche de la salle favorite." },
-  clemence: { label:"Clémence", start:"2025-05-09", photo:"/assets/clemence.jpg", cover:"—", spec:"—", dig:"Sous le zip de la chaise n°4." },
-  nat:      { label:"Nat",      start:"2017-02-24", photo:"/assets/nat.jpg",      cover:"—", spec:"—", dig:"Enveloppe sous le bureau technique." }
+  sam:      { label:"Sam",      start:"2023-10-12", photo:"/assets/sam.jpg",      cover:"S.A.M", spec:"Créatrice de contenus hors norme & terreur de Wake Up", dig:"Sous le bureau du GM, côté gauche." },
+  camille:  { label:"Camille",  start:"2022-09-08", photo:"/assets/camille.jpg",  cover:"Miss Rey", spec:"Graphiste Phasme avec esprit vif, très cOnFiDeNtiEL", dig:"Sous le zip de la chaise n°2." },
+  maxence:  { label:"Maxence",  start:"2025-03-29", photo:"/assets/maxence.jpg",  cover:"M.A.X", spec:"Futur Spielberg moderne, dit souvent AGENT C'EST CHARLES", dig:"Tiroir 3, salle préférée." },
+  juliette: { label:"Juliette", start:"2024-08-24", photo:"/assets/juliette.jpg", cover:"Juju", spec:"Spécialiste sous couverture...Maline..trop maline.. ", dig:"Enveloppe collée sous le comptoir." },
+  romane:   { label:"Romane",   start:"2025-05-09", photo:"/assets/romane.jpg",   cover:"Roro", spec:"Bout en train, Répartie aiguisée comme un couteau et metteuse d'ambiance", dig:"Derrière l’affiche de la salle favorite." },
+  clemence: { label:"Clémence", start:"2025-05-09", photo:"/assets/clemence.jpg", cover:"C.L.E.M", spec:"Spécialiste des interventions Psychose et des rébus sur post it", dig:"Sous le zip de la chaise n°4." },
+  nat:      { label:"Nat",      start:"2017-02-24", photo:"/assets/nat.jpg",      cover:"Cheffe", spec:"Point fort : cerveau de l'opération Point faible : les margaritas", dig:"Enveloppe sous le bureau technique." }
 };
 
 /* ======= Banque de questions ======= */

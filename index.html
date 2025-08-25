@@ -297,7 +297,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 startInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter") btnValidate.click(); });
 
 /* ======= Pattern 5×5 (tactile + souris) ======= */
-const SECRET_PATTERN = [1,2,7,6,11,12,17,18,23,24,19,14,9,8,3,4,0]; // séquence exacte
+const SECRET_PATTERN = [1,2,7,6,11,12,17,18,23,24,19,14,9,8,3,4]; // séquence exacte
 
 function buildPattern(agent){
   const grid = document.getElementById('grid');

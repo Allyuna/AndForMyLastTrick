@@ -3,27 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AND FOR MY LAST TRICK – Wake Up</title>
+<title>AND FOR MY LAST TRICK – Brief Agents</title>
 <style>
-  :root{--bg:#0b0f13;--panel:#121821;--ink:#e6edf3;--muted:#9aa4af;--accent:#20e3b2;--warn:#ff6b6b;--lock:#ffd166}
+  :root{
+    --bg:#0b0f13; --panel:#121821; --ink:#e6edf3; --muted:#9aa4af; --accent:#20e3b2; --warn:#ff6b6b;
+    --code:#0a0; --lock:#ffd166;
+  }
   *{box-sizing:border-box}
-  body{margin:0;font-family:ui-monospace,Menlo,Consolas,monospace;background:radial-gradient(1200px 600px at 70% -10%,#0e1622 0%,#0b0f13 55%,#090c10 100%)}
+  body{margin:0;font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;background:radial-gradient(1200px 600px at 70% -10%,#0e1622 0%,#0b0f13 55%,#090c10 100%);}
   .wrap{max-width:900px;margin:0 auto;padding:24px}
   header{display:flex;align-items:center;gap:12px;color:var(--ink);margin:24px 0}
-  .seal{width:46px;height:46px;border:2px solid var(--accent);border-radius:50%;display:grid;place-items:center;font-weight:700;color:var(--accent)}
+  .seal{width:46px;height:46px;border:2px solid var(--accent);border-radius:50%;display:grid;place-items:center;font-weight:700;color:var(--accent);letter-spacing:1px}
   h1{font-size:24px;margin:0}
-  .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid #1f2937;border-radius:14px;padding:20px;color:var(--ink);backdrop-filter:blur(2px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid #1f2937;border-radius:14px;padding:20px;color:var(--ink);backdrop-filter:blur(2px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
   .grid{display:grid;gap:16px}
+  .grid-2{grid-template-columns:1fr 1fr}
   label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-  select,input,button{width:100%;padding:12px 14px;background:#0f141b;border:1px solid #243043;border-radius:10px;color:var(--ink);outline:none}
-  select:focus,input:focus{border-color:#335b99;box-shadow:0 0 0 3px rgba(51,91,153,.25)}
+  select,input,button,textarea{width:100%;padding:12px 14px;background:#0f141b;border:1px solid #243043;border-radius:10px;color:var(--ink);outline:none}
+  select:focus,input:focus,textarea:focus{border-color:#335b99;box-shadow:0 0 0 3px rgba(51,91,153,.25)}
   button{background:linear-gradient(90deg,#123,#0f2);border:0;font-weight:700;cursor:pointer}
   button:hover{filter:brightness(1.15)}
   .hint{font-size:12px;color:var(--muted)}
   .err{color:var(--warn);font-size:13px;margin-top:8px}
   .ok{color:var(--accent)}
   .badge{display:inline-block;font-size:12px;color:#0c0;padding:3px 8px;border:1px solid #0c0;border-radius:999px}
-  .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .row{display:flex;gap:16px;align-items:center}
   .avatar{width:120px;height:120px;border-radius:12px;object-fit:cover;border:1px solid #1f2937;background:#0e131a}
   .mono{font-family:inherit;font-size:14px;color:var(--muted)}
   .list{margin:0;padding-left:18px}
@@ -32,6 +36,7 @@
   .lock{color:var(--lock)}
   .hidden{display:none}
   .foot{margin-top:18px;font-size:12px;color:var(--muted)}
+
   /* Pattern lock */
   .pat-grid{user-select:none;touch-action:none;width:360px;max-width:92vw;aspect-ratio:1;border:1px solid #243043;border-radius:12px;margin:10px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px;background:#0f141b;position:relative}
   .pat-node{border:1px solid #335b99;border-radius:50%;background:#0b0f13;position:relative}
@@ -51,7 +56,7 @@
     </div>
   </header>
 
-  <!-- Intro -->
+  <!-- ÉCRAN 1 : BRIEF + FORM -->
   <section id="intro" class="card">
     <p><strong>Ordre de mission</strong> : identifiez-vous puis confirmez votre date d’arrivée à l’Agence.</p>
     <div class="grid">
@@ -70,53 +75,60 @@
       </div>
       <div>
         <label for="startDate">Date d’arrivée</label>
-        <input id="startDate" type="text" placeholder="ex : 12/10/2023 · 12 octobre 2023 · 12 oct 23">
-        <div class="hint">Accents tolérés. Formats FR/EN ok.</div>
+        <input id="startDate" type="text" placeholder="ex : 12/02/1999 · 12 Février 1999 · 12 fev 99">
+        <div class="hint">Accents tolérés. Formats FR/EN ok. Ex : “12 Février 1999”, “12/02/1999”.</div>
       </div>
       <div>
         <button id="validate">Valider &gt; Dossier Agent</button>
-        <div id="errIntro" class="err hidden">Date invalide pour cet agent.</div>
+        <div id="errIntro" class="err hidden">Date invalide pour cet agent. Vérifiez et réessayez.</div>
       </div>
     </div>
+    <div class="foot">Note : l’accès au dossier Agent requiert une validation exacte. Tentatives illimitées.</div>
   </section>
 
-  <!-- Profil + Quiz -->
+  <!-- ÉCRAN 2 : PROFIL AGENT -->
   <section id="profile" class="card hidden">
     <div class="row">
       <img id="agentPhoto" class="avatar" alt="Photo Agent" src="">
       <div>
         <h2 id="agentTitle">Agent —</h2>
-        <div class="mono" id="coverName">Nom de couverture : <span class="code">—</span></div>
+        <div class="mono" id="coverName">Nom de couverture : <span class="code">— à définir —</span></div>
         <div class="mono" id="seniority">Ancienneté : —</div>
-        <div class="mono" id="spec">Spécialité : <span class="code">—</span></div>
+        <div class="mono" id="spec">Spécialité : <span class="code">— à définir —</span></div>
       </div>
     </div>
+
     <div class="divider"></div>
+
     <h3>Interrogatoire de sécurité <span class="badge">3 questions</span></h3>
     <ol id="quiz" class="list"></ol>
-    <button id="checkQuiz">Soumettre</button>
+    <button id="checkQuiz">Soumettre les réponses</button>
     <div id="quizMsg" class="err hidden"></div>
+
     <div id="reward" class="hidden">
       <div class="divider"></div>
       <h3 class="lock">Accès conditionnel accordé</h3>
       <p class="mono">Lieu de fouille pour <span id="who"></span> : <span id="digHint" class="code">—</span></p>
     </div>
+
     <button id="openPattern" class="hidden">Schéma (déverrouiller)</button>
   </section>
 
-  <!-- Schéma -->
+  <!-- ÉCRAN 3 : SCHÉMA 5x5 -->
   <section id="pattern" class="card hidden">
     <h3>Schéma 5×5</h3>
+    <p class="mono">Trace la forme trouvée avec les 7 fragments. Garde le doigt/la souris enfoncé.</p>
     <div id="grid" class="pat-grid"></div>
     <div id="patMsg" class="err hidden"></div>
     <button id="toPlan" class="hidden">Valider le schéma &gt;</button>
   </section>
 
-  <!-- Plan + Cloze -->
+  <!-- ÉCRAN 4 : PLAN + TEXTE À TROUS -->
   <section id="plan" class="card hidden">
     <h3>Plan de l’accueil</h3>
-    <img src="assets/plan-accueil.png" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px">
+    <img id="planImg" alt="Plan de l’accueil" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px" src="assets/plan-accueil.png">
     <div class="divider"></div>
+    <h4>Texte à trous</h4>
     <p id="clozeText" class="mono"></p>
     <div class="row">
       <input id="clozeAnswer" type="text" placeholder="Réponse (ex: 750)">
@@ -125,26 +137,30 @@
     <div id="clozeMsg" class="err hidden"></div>
   </section>
 
-  <!-- Finale -->
+  <!-- ÉCRAN 5 : FINALE -->
   <section id="finale" class="card hidden">
     <h3>Rébus</h3>
-    <img src="assets/rebus-bravo-agents.png" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px">
+    <img id="rebusImg" alt="Rébus" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px" src="assets/rebus-bravo-agents.png">
     <p class="mono">Solution attendue : <span class="code">BRAVO AGENTS</span></p>
     <div class="divider"></div>
-    <p class="code">Sous le panneau d’affichage, derrière le cadre noir.</p>
+    <h4>Emplacement final du trésor</h4>
+    <p class="code" id="treasureHint">Sous le panneau d’affichage, derrière le cadre noir.</p>
   </section>
 </div>
 
 <script>
-/* === CONFIG === */
-const AGENTS={sam:{label:"Sam",start:"2023-10-12",photo:"assets/sam.jpg",cover:"—",spec:"—",dig:"Sous le bureau du GM."},
-camille:{label:"Camille",start:"2022-09-08",photo:"assets/camille.jpg",cover:"—",spec:"—",dig:"Sous le zip de la chaise n°2."},
-maxence:{label:"Maxence",start:"2025-03-29",photo:"assets/maxence.jpg",cover:"—",spec:"—",dig:"Tiroir 3, salle préférée."},
-juliette:{label:"Juliette",start:"2024-08-24",photo:"assets/juliette.jpg",cover:"—",spec:"—",dig:"Enveloppe sous le comptoir."},
-romane:{label:"Romane",start:"2025-05-09",photo:"assets/romane.jpg",cover:"—",spec:"—",dig:"Derrière l’affiche de la salle."},
-clemence:{label:"Clémence",start:"2025-05-09",photo:"assets/clemence.jpg",cover:"—",spec:"—",dig:"Sous la chaise n°4."},
-nat:{label:"Nat",start:"2017-02-24",photo:"assets/nat.jpg",cover:"—",spec:"—",dig:"Bureau technique."}};
+/* ======= Données Agents ======= */
+const AGENTS = {
+  sam:      { label:"Sam",      start:"2023-10-12", photo:"/assets/sam.jpg",      cover:"S.A.M", spec:"Créatrice de contenus hors norme & terreur de Wake Up", dig:"Sous le bureau du GM, côté gauche." },
+  camille:  { label:"Camille",  start:"2022-09-08", photo:"/assets/camille.jpg",  cover:"Miss Rey", spec:"Graphiste Phasme avec esprit vif, très cOnFiDeNtiEL", dig:"Sous le zip de la chaise n°2." },
+  maxence:  { label:"Maxence",  start:"2025-03-29", photo:"/assets/maxence.jpg",  cover:"M.A.X", spec:"Futur Spielberg moderne, dit souvent AGENT C'EST CHARLES", dig:"Tiroir 3, salle préférée." },
+  juliette: { label:"Juliette", start:"2024-08-24", photo:"/assets/juliette.jpg", cover:"Juju", spec:"Spécialiste sous couverture...Maline..trop maline.. ", dig:"Enveloppe collée sous le comptoir." },
+  romane:   { label:"Romane",   start:"2025-05-09", photo:"/assets/romane.jpg",   cover:"Roro", spec:"Bout en train, Répartie aiguisée comme un couteau et metteuse d'ambiance", dig:"Derrière l’affiche de la salle favorite." },
+  clemence: { label:"Clémence", start:"2025-05-09", photo:"/assets/clemence.jpg", cover:"C.L.E.M", spec:"Spécialiste des interventions Psychose et des rébus sur post it", dig:"Sous le zip de la chaise n°4." },
+  nat:      { label:"Nat",      start:"2017-02-24", photo:"/assets/nat.jpg",      cover:"Cheffe", spec:"Point fort : cerveau de l'opération Point faible : les margaritas", dig:"Enveloppe sous le bureau technique." }
+};
 
+/* ======= Banque de questions ======= */
 const QUESTION_BANK = [
   { q:"Date de création de l’Agence Wake Up ?", answers:["24/02/2017","24-02-2017","24 02 2017","24 fevrier 2017","24 février 2017","24 february 2017","feb 24 2017","2017-02-24"], norm:"2017-02-24" },
   { q:"Première salle ouverte à Wake Up ?", answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"] },
@@ -154,8 +170,9 @@ const QUESTION_BANK = [
   { q:"Vrai ou Faux – Axomama est la déesse de la pomme de terre pour les Incas ?", answers:["vrai","true"] },
   { q:"Vrai ou Faux – Une joueuse s’est déjà cassé une dent dans Psychose ?", answers:["vrai","true"] },
   { q:"Vrai ou Faux – Un joueur a déjà fait pipi dans Inti Kancha ?", answers:["vrai","true"] },
-  { q:"Vrai ou Faux – On a eu 3 demandes en mariage à l’Agence ?", answers:["vrai","true"] },
+  { q:"Vrai ou Faux – On a eu au moins 3 demandes en mariage à l’Agence ?", answers:["vrai","true"] },
   { q:"Combien d’Agents au total ont été recrutés depuis le début de l’Agence ?", answers:["48"] },
+  { q:"Quelle mission a Agent A joué pour de son entretien d'embauche ?", answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"] },
   { q:"En quelle année est sorti le film Escape Room au cinéma ?", answers:["2019"] },
   { q:"Dans quelle salle es-tu propice à t’enfermer pendant ton rangement ?", answers:["protocole vegas","vegas"] },
   { q:"Quel est le pays de naissance des Escape Games ?", answers:["japon","japan"] },
@@ -163,185 +180,176 @@ const QUESTION_BANK = [
   { q:"Qui a le cri le plus terrifiant de Wake Up ?", answers:["sam","agent sam","camille bahougne"] },
   { q:"Quelle est la salle la plus longue à ranger ?", answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"] },
   { q:"Quelle est la salle où les joueurs pètent le plus ?", answers:["psychose"] },
-  { q:"Dans quelle salle y a-t-il des thermos coupées en deux pour faire des charnières ?", answers:["protocole vegas","vegas"] },
+  { q:"Dans quelle salle y a-t-il des thermos coupées en deux pour faire des charnières sur le coffre géant ?", answers:["protocole vegas","vegas"] },
   { q:"Quelle salle contient le plus de codes à chiffres ?", answers:["contagion"] },
-  { q:"1er avril 2023, l’agent Victor a annoncé de fausses salles. Donne le nom d’une d’entre elles.", type:"select", options:["Protocole Vegan","Contafion","L’Affaire Blackpoule","Arthrose","ET et la plancha"], answers:["protocole vegan","contafion","l'affaire blackpoule","laffaire blackpoule","arthrose","et et la plancha","et la plancha"] }
+  { q:"1er avril 2023, l’agent Victor a annoncé de fausses salles. Donne le nom d’une d’entre elles.", answers:["protocole vegan","contafion","l'affaire blackpoule","laffaire blackpoule","arthrose","et et la plancha","et la plancha"] }
 ];
 
-
-const CLOZE_BY_AGENT={sam:"Complète : numéro { _ }",camille:"Code { _ }",maxence:"Procédure { _ }",juliette:"Bouton { _ }",romane:"Casier { _ }",clemence:"Scanner { _ }"};
-const CLOZE_SOLUTION="750";
-const SECRET_PATTERN = [1,2,7,6,11,12,17,18,23,24,19,14,9,8,3,4];
-
-
-/* === OUTILS === */
-const $=s=>document.querySelector(s);
-function normalize(t){return (t||"").toLowerCase();}
-
-/* === INTRO === */
-$("#validate").onclick=()=>{
-  const key=$("#agent").value, raw=$("#startDate").value;
-  if(!key||!raw)return;
-  if(!AGENTS[key])return;
-  const iso=AGENTS[key].start;
-  if(!raw.includes(iso.split("-")[0])&&!raw.includes("2017")&&!raw.includes("2022")&&!raw.includes("2023")&&!raw.includes("2024")&&!raw.includes("2025")){$("#errIntro").classList.remove("hidden");return;}
-  $("#intro").classList.add("hidden"); loadProfile(key);
-};
-
-/* === PROFIL === */
-function loadProfile(key){
-  const A=AGENTS[key];
-  $("#agentTitle").textContent="Agent "+A.label;
-  $("#agentPhoto").src=A.photo;
-  $("#who").textContent=A.label;
-  $("#digHint").textContent=A.dig;
-  const qs=[...QUESTION_BANK].sort(()=>Math.random()-0.5).slice(0,3);
-  const list=$("#quiz"); list.innerHTML="";
-  qs.forEach((it,i)=>{list.innerHTML+=`<li>${it.q}<br><input id="q${i}"></li>`;});
-  $("#checkQuiz").onclick=()=>{
-    let ok=true; qs.forEach((it,i)=>{const v=normalize($("#q"+i).value);if(!it.answers.some(a=>v.includes(a)))ok=false;});
-    if(!ok){$("#quizMsg").textContent="Mauvaise réponse.";$("#quizMsg").classList.remove("hidden");return;}
-    $("#quizMsg").textContent="Correct.";$("#quizMsg").classList.add("ok");
-    $("#reward").classList.remove("hidden");
-    $("#openPattern").classList.remove("hidden");
-  };
-  $("#profile").classList.remove("hidden");
-  $("#openPattern").onclick=()=>{$("#profile").classList.add("hidden");$("#pattern").classList.remove("hidden");buildPattern(key);};
+/* ======= Dates souples ======= */
+const MONTHS = {"janvier":1,"fevrier":2,"février":2,"february":2,"mars":3,"avril":4,"mai":5,"juin":6,"juillet":7,"aout":8,"août":8,"august":8,"septembre":9,"octobre":10,"novembre":11,"decembre":12,"décembre":12,"december":12,
+"jan":1,"feb":2,"fev":2,"fév":2,"mar":3,"apr":4,"avr":4,"may":5,"jun":6,"jul":7,"aug":8,"sep":9,"sept":9,"oct":10,"nov":11,"dec":12,"déc":12};
+function normalize(str){
+  return (str||"").toLowerCase()
+    .normalize('NFD').replace(/\p{Diacritic}/gu,'')
+    .replace(/[^a-z0-9\s\/\-\.,]/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+function parseFlexibleDate(input){
+  const s = normalize(input); let m;
+  if((m=s.match(/^(\d{4})[\/\-. ](\d{1,2})[\/\-. ](\d{1,2})$/))){const[_,Y,M,D]=m;return isoOrNull(+Y,+M,+D);}
+  if((m=s.match(/^(\d{1,2})[\/\-. ](\d{1,2})[\/\-. ](\d{2,4})$/))){let[_,D,M,Y]=m; if(Y.length===2)Y=String(2000+ +Y); return isoOrNull(+Y,+M,+D);}
+  if((m=s.match(/^(\d{1,2}) ([a-z\.]+) (\d{2,4})$/))){let[_,D,mon,Y]=m;mon=mon.replace(/\./g,'');if(Y.length===2)Y=String(2000+ +Y);const M=MONTHS[mon];if(!M)return null;return isoOrNull(+Y,+M,+D);}
+  if((m=s.match(/^([a-z\.]+) (\d{1,2}) (\d{2,4})$/))){let[_,mon,D,Y]=m;mon=mon.replace(/\./g,'');if(Y.length===2)Y=String(2000+ +Y);const M=MONTHS[mon];if(!M)return null;return isoOrNull(+Y,+M,+D);}
+  return null;
+}
+function isoOrNull(Y,M,D){
+  const dt=new Date(Date.UTC(Y,M-1,D));
+  return (dt.getUTCFullYear()===Y && dt.getUTCMonth()===M-1 && dt.getUTCDate()===D)
+    ? `${String(Y).padStart(4,'0')}-${String(M).padStart(2,'0')}-${String(D).padStart(2,'0')}` : null;
 }
 
-/* === PATTERN === */
+/* ======= UI logique ======= */
+const $ = sel => document.querySelector(sel);
+const intro = $("#intro"), profile = $("#profile");
+const errIntro = $("#errIntro");
+const agentSel = $("#agent"), startInput = $("#startDate");
+const btnValidate = $("#validate");
+
+btnValidate.addEventListener("click", () => {
+  const key = agentSel.value;
+  const raw = startInput.value;
+  if (!key || !raw){ showErr("Sélectionnez un agent et entrez une date."); return; }
+  const iso = parseFlexibleDate(raw);
+  if (!iso){ showErr("Format de date non reconnu. Essayez jj/mm/aaaa ou « 12 octobre 2023 »."); return; }
+  const ok = AGENTS[key]?.start === iso;
+  if (!ok){ showErr("Date invalide pour cet agent. Indice : vérifiez le mois."); return; }
+  errIntro.classList.add("hidden");
+  loadProfile(key);
+});
+function showErr(msg){ errIntro.textContent=msg; errIntro.classList.remove("hidden"); }
+
+/* ======= Profil + Quiz ======= */
+function loadProfile(key){
+  const A = AGENTS[key];
+  $("#agentTitle").textContent = `Agent ${A.label}`;
+  const base = location.origin + location.pathname.replace(/index\.html?$/,'');
+  const src  = /^https?:/i.test(A.photo) ? A.photo : base + (A.photo.startsWith('/') ? A.photo.slice(1) : A.photo);
+  $("#agentPhoto").src = src;
+  $("#agentPhoto").onerror = () => console.error("Image introuvable:", src);
+  $("#coverName").innerHTML = `Nom de couverture : <span class="code">${A.cover}</span>`;
+  $("#spec").innerHTML = `Spécialité : <span class="code">${A.spec}</span>`;
+  $("#seniority").textContent = "Ancienneté : " + seniorityFrom(A.start);
+  $("#who").textContent = A.label;
+  $("#digHint").textContent = A.dig;
+
+  const pool = shuffle(QUESTION_BANK.slice());
+  const picked = pool.slice(0,3);
+  const list = $("#quiz"); list.innerHTML = "";
+  picked.forEach((item,idx)=>{
+    const li = document.createElement("li");
+    const id = `q_${idx}`;
+    li.innerHTML = `
+      <div style="margin-bottom:6px">${item.q}</div>
+      <input type="text" id="${id}" placeholder="Votre réponse">
+      <div class="hint">Tolérance aux accents/majuscules.</div>
+    `;
+    list.appendChild(li);
+  });
+
+  $("#checkQuiz").onclick = () => {
+    const ok = picked.every((item,idx)=>{
+      const val = normalize($("#q_"+idx).value);
+      if (!val) return false;
+      if (item.norm){ const iso = parseFlexibleDate(val); return iso === item.norm; }
+      return item.answers.some(a => normalize(a)===val);
+    });
+    const msg = $("#quizMsg");
+    if (!ok){
+      msg.textContent = "Au moins une réponse est incorrecte. Relevez vos indices et réessayez.";
+      msg.classList.remove("hidden"); msg.classList.remove("ok");
+      return;
+    }
+    msg.textContent = "Vérification réussie. Coordonnées de fouille débloquées.";
+    msg.classList.remove("hidden"); msg.classList.add("ok");
+    $("#reward").classList.remove("hidden");
+    document.getElementById('openPattern').classList.remove('hidden');
+  };
+
+  intro.classList.add("hidden");
+  profile.classList.remove("hidden");
+
+  document.getElementById('openPattern').onclick = ()=>{
+    profile.classList.add('hidden');
+    document.getElementById('pattern').classList.remove('hidden');
+    buildPattern(key);
+  };
+}
+
+function seniorityFrom(isoStart){
+  const start=new Date(isoStart+"T00:00:00Z"); const now=new Date();
+  let y=now.getUTCFullYear()-start.getUTCFullYear();
+  let m=now.getUTCMonth()-start.getUTCMonth();
+  let d=now.getUTCDate()-start.getUTCDate();
+  if(d<0){m--;} if(m<0){y--;m+=12;}
+  return `${y} an${y>1?'s':''} ${m} mois`;
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+startInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter") btnValidate.click(); });
+
+/* ======= Pattern 5×5 (tactile + souris) ======= */
+const SECRET_PATTERN = [1,2,7,6,11,12,17,18,23,24,19,14,9,8,3,4,0]; // séquence exacte
+
 function buildPattern(agent){
   const grid = document.getElementById('grid');
   const patMsg = document.getElementById('patMsg');
   const toPlan = document.getElementById('toPlan');
 
   grid.innerHTML = '';
-  const nodes = [];
-  for (let i=0;i<25;i++){
-    const d = document.createElement('div');
-    d.className = 'pat-node';
-    d.dataset.idx = i;
-    grid.appendChild(d);
-    nodes.push(d);
+  const nodes=[];
+  for(let i=0;i<25;i++){
+    const d=document.createElement('div');
+    d.className='pat-node'; d.dataset.idx=i;
+    grid.appendChild(d); nodes.push(d);
   }
 
-  const canvas = document.createElement('canvas');
-  canvas.className = 'pat-canvas';
-  grid.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
+  const canvas=document.createElement('canvas');
+  canvas.className='pat-canvas'; grid.appendChild(canvas);
+  const ctx=canvas.getContext('2d');
+  function resize(){ const r=grid.getBoundingClientRect(); canvas.width=r.width; canvas.height=r.height; }
+  new ResizeObserver(resize).observe(grid); resize();
 
-  function resize(){
-    const r = grid.getBoundingClientRect();
-    canvas.width = r.width; canvas.height = r.height;
-  }
-  new ResizeObserver(resize).observe(grid);
-  resize();
-
-  let active = false, path = [];
-
-  function center(el){
-    const r = el.getBoundingClientRect(), g = grid.getBoundingClientRect();
-    return { x: r.left - g.left + r.width/2, y: r.top - g.top + r.height/2 };
-  }
-  function clearDraw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    nodes.forEach(n=>n.classList.remove('on'));
-  }
+  let active=false, path=[];
+  function center(el){ const r=el.getBoundingClientRect(), g=grid.getBoundingClientRect(); return {x:r.left-g.left+r.width/2, y:r.top-g.top+r.height/2}; }
+  function clearDraw(){ ctx.clearRect(0,0,canvas.width,canvas.height); nodes.forEach(n=>n.classList.remove('on')); }
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.lineWidth = 3; ctx.strokeStyle = '#20e3b2';
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.lineWidth=3; ctx.strokeStyle='#20e3b2'; ctx.lineJoin='round'; ctx.lineCap='round';
     ctx.beginPath();
-    path.forEach((idx,k)=>{
-      const c = center(nodes[idx]);
-      if (k===0) ctx.moveTo(c.x,c.y); else ctx.lineTo(c.x,c.y);
-    });
-    ctx.stroke();
-    path.forEach(idx=>nodes[idx].classList.add('on'));
+    path.forEach((idx,k)=>{ const c=center(nodes[idx]); if(k===0) ctx.moveTo(c.x,c.y); else ctx.lineTo(c.x,c.y); });
+    ctx.stroke(); path.forEach(idx=>nodes[idx].classList.add('on'));
   }
-
-  function idxFromTarget(t){
-    const n = t && t.closest ? t.closest('.pat-node') : null;
-    return n ? +n.dataset.idx : -1;
-  }
-
-  function startFromTarget(t){
-    active = true; path = []; clearDraw();
-    maybeAddTarget(t);
-  }
-  function moveFromTarget(t){
-    if (!active) return;
-    maybeAddTarget(t);
-  }
-  function endStroke(){
-    if (!active) return;
-    active = false; validate();
-  }
-
-  function maybeAddTarget(t){
-    const idx = idxFromTarget(t);
-    if (idx < 0) return;
-    if (path[path.length-1] === idx) return;
-    path.push(idx); draw();
-  }
+  function idxFromTarget(t){ const n=t&&t.closest?t.closest('.pat-node'):null; return n?+n.dataset.idx:-1; }
+  function startFromTarget(t){ active=true; path=[]; clearDraw(); maybeAddTarget(t); }
+  function moveFromTarget(t){ if(!active) return; maybeAddTarget(t); }
+  function endStroke(){ if(!active) return; active=false; validate(); }
+  function maybeAddTarget(t){ const idx=idxFromTarget(t); if(idx<0) return; if(path[path.length-1]===idx) return; path.push(idx); draw(); }
 
   // Souris
   grid.addEventListener('mousedown', e=>{ e.preventDefault(); startFromTarget(e.target); });
   grid.addEventListener('mousemove', e=>{ moveFromTarget(e.target); });
   window.addEventListener('mouseup', ()=> endStroke());
 
-  // Tactile (document.elementFromPoint)
+  // Tactile via elementFromPoint
   grid.addEventListener('touchstart', e=>{
     e.preventDefault();
-    const t = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
     startFromTarget(t);
   }, {passive:false});
   grid.addEventListener('touchmove', e=>{
     e.preventDefault();
-    const t = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);
     moveFromTarget(t);
   }, {passive:false});
   grid.addEventListener('touchend', e=>{
-    e.preventDefault();
-    endStroke();
-  }, {passive:false});
-
-  function normalize(a){ const out=[]; for(const v of a){ if(out[out.length-1]!==v) out.push(v); } return out; }
-  function same(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
-
-  // Pattern plus difficile (zigzags). Mets le même qu’en config globale si tu centralises.
-  const SECRET_PATTERN = [1,2,7,6,11,12,17,18,23,24,19,14,9,8,3,4,0];
-
-  function validate(){
-    const ok = same(normalize(path), SECRET_PATTERN);
-    if (!ok){
-      patMsg.textContent = "Schéma non validé. Réessaie.";
-      patMsg.classList.remove('hidden');
-      patMsg.classList.remove('ok');
-      grid.classList.add('shake'); setTimeout(()=>grid.classList.remove('shake'),250);
-      clearDraw(); path = [];
-      return;
-    }
-    patMsg.textContent = "Schéma validé.";
-    patMsg.classList.remove('hidden');
-    patMsg.classList.add('ok');
-    toPlan.classList.remove('hidden');
-  }
-
-  toPlan.onclick = ()=>{
-    document.getElementById('pattern').classList.add('hidden');
-    preparePlan(agent);
-    document.getElementById('plan').classList.remove('hidden');
-  };
-}
-
-
-
-/* === PLAN === */
-function preparePlan(agent){
-  $("#clozeText").textContent=CLOZE_BY_AGENT[agent].replace("{ _ }","_____");
-  $("#checkCloze").onclick=()=>{if($("#clozeAnswer").value.trim()===CLOZE_SOLUTION){$("#plan").classList.add("hidden");$("#finale").classList.remove("hidden");}else{$("#clozeMsg").textContent="Mauvaise réponse.";$("#clozeMsg").classList.remove("hidden");}};
-}
-</script>
-</body>
-</html>
+    e.preventDefault(); endStroke();
+  }, {pass

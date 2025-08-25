@@ -114,41 +114,39 @@
   </section>
 
   <!-- Écran 4 -->
-  <section id="plan" class="card hidden">
-    <h3>Plan de l’accueil</h3>
-    <img id="planImg" alt="Plan de l’accueil" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px" src="assets/plan-accueil.png">
-    <div class="divider"></div>
-    <h4>Texte à trous</h4>
-    <p id="clozeText" class="mono"></p>
-    <div class="row" style="gap:10px">
-      <input id="clozeAnswer" type="text" placeholder="Réponse attendue">
-      <button id="checkCloze">Valider</button>
-    </div>
-    <div id="clozeMsg" class="err hidden"></div>
-  </section>
+<section id="plan" class="card hidden">
+  <h3>Déplacements d’Agents</h3>
+  <p class="mono">Tracez un trait droit d’un déplacement à l’autre, même si ça traverse les murs.</p>
+  <img src="assets/Plan.jpg" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px">
+  <div class="divider"></div>
+  <p id="clozeText" class="mono"></p>
+  <div class="row" style="gap:10px">
+    <input id="clozeAnswer" type="text" placeholder="Entrez la réponse finale">
+    <button id="checkCloze">Réponse</button>
+  </div>
+  <div id="clozeMsg" class="err hidden"></div>
+</section>
 
-  <!-- Écran 5 -->
-  <section id="finale" class="card hidden">
-    <h3>Rébus</h3>
-    <img id="rebusImg" alt="Rébus" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px" src="assets/rebus-bravo-agents.png">
-    <p class="mono">Solution attendue : <span class="code">BRAVO AGENTS</span></p>
-    <div class="divider"></div>
-    <h4>Emplacement final du trésor</h4>
-    <p class="code" id="treasureHint">Sous le panneau d’affichage, derrière le cadre noir.</p>
-  </section>
-</div>
+<!-- Écran 5 -->
+<section id="finale" class="card hidden">
+  <h3>Bravo Agents</h3>
+  <p class="mono">Vous avez complété la mission.</p>
+  <img src="assets/Last.jpg" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px">
+</section>
+
 
 <script>
 /* === Données Agents (dates correctes + spécialités) === */
 const AGENTS = {
-  sam:{label:"Sam",start:"2023-10-12",photo:"/assets/sam.jpg",cover:"S.A.M",spec:"Créatrice de contenus hors norme & terreur de Wake Up",dig:"Sous le bureau du GM, côté gauche."},
-  camille:{label:"Camille",start:"2022-09-08",photo:"/assets/camille.jpg",cover:"Miss Rey",spec:"Graphiste Phasme avec esprit vif, très cOnFiDeNtiEL",dig:"Sous le zip de la chaise n°2."},
-  maxence:{label:"Maxence",start:"2025-03-29",photo:"/assets/maxence.jpg",cover:"M.A.X",spec:"Futur Spielberg moderne, dit souvent AGENT C'EST CHARLES",dig:"Tiroir 3, salle préférée."},
-  juliette:{label:"Juliette",start:"2024-08-24",photo:"/assets/juliette.jpg",cover:"Juju",spec:"Spécialiste sous couverture...Maline..trop maline..",dig:"Enveloppe collée sous le comptoir."},
-  romane:{label:"Romane",start:"2025-05-09",photo:"/assets/romane.jpg",cover:"Roro",spec:"Bout en train, Répartie aiguisée comme un couteau et metteuse d'ambiance",dig:"Derrière l’affiche de la salle favorite."},
-  clemence:{label:"Clémence",start:"2025-05-09",photo:"/assets/clemence.jpg",cover:"C.L.E.M",spec:"Spécialiste des interventions Psychose et des rébus sur post it",dig:"Sous le zip de la chaise n°4."},
-  nat:{label:"Nat",start:"2017-02-24",photo:"/assets/nat.jpg",cover:"Cheffe",spec:"Point fort : cerveau de l'opération · Point faible : les margaritas",dig:"Enveloppe sous le bureau technique."}
+  sam:{label:"Sam",start:"2023-10-12",photo:"assets/sam.jpg",cover:"S.A.M",spec:"Créatrice de contenus hors norme & terreur de Wake Up",dig:"Sous le bureau du GM, côté gauche."},
+  camille:{label:"Camille",start:"2022-09-08",photo:"assets/camille.jpg",cover:"Miss Rey",spec:"Graphiste Phasme avec esprit vif, très cOnFiDeNtiEL",dig:"Sous le zip de la chaise n°2."},
+  maxence:{label:"Maxence",start:"2025-03-29",photo:"assets/maxence.jpg",cover:"M.A.X",spec:"Futur Spielberg moderne, dit souvent AGENT C'EST CHARLES",dig:"Tiroir 3, salle préférée."},
+  juliette:{label:"Juliette",start:"2024-08-24",photo:"assets/juliette.jpg",cover:"Juju",spec:"Spécialiste sous couverture...Maline..trop maline..",dig:"Enveloppe collée sous le comptoir."},
+  romane:{label:"Romane",start:"2025-05-09",photo:"assets/romane.jpg",cover:"Roro",spec:"Bout en train, Répartie aiguisée comme un couteau et metteuse d'ambiance",dig:"Derrière l’affiche de la salle favorite."},
+  clemence:{label:"Clémence",start:"2025-05-09",photo:"assets/clemence.jpg",cover:"C.L.E.M",spec:"Spécialiste des interventions Psychose et des rébus sur post it",dig:"Sous le zip de la chaise n°4."},
+  nat:{label:"Nat",start:"2017-02-24",photo:"assets/nat.jpg",cover:"Cheffe",spec:"Point fort : cerveau de l'opération · Point faible : les margaritas",dig:"Enveloppe sous le bureau technique."}
 };
+
 
 /* === Textes à trous / Banque de mots === */
 const CLOZE_TEXTS = {
@@ -327,14 +325,11 @@ function buildPattern(agent){
 function preparePlan(agent){
   document.getElementById("pattern").classList.add("hidden");
   document.getElementById("plan").classList.remove("hidden");
-
-  // injecte le texte correspondant
   document.getElementById("clozeText").textContent = CLOZE_TEXTS[agent] || "Aucun texte défini.";
-
   const msg = document.getElementById("clozeMsg");
   document.getElementById("checkCloze").onclick = ()=>{
     const v = (document.getElementById("clozeAnswer").value||"").trim().toLowerCase();
-    if(v === "750"){   // ton code attendu
+    if(v === "750"){
       document.getElementById("plan").classList.add("hidden");
       document.getElementById("finale").classList.remove("hidden");
     } else {
@@ -343,6 +338,7 @@ function preparePlan(agent){
     }
   };
 }
+
 
 <!-- Écran Plan + Texte à trous -->
 <section id="plan" class="card hidden">
@@ -367,18 +363,6 @@ function preparePlan(agent){
   <img src="assets/Last.jpg" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px">
 </section>
 
-/* === Plan + texte à trous (code attendu 750) === */
-function preparePlan(agent){
-  const who=(document.getElementById('who')?.textContent||'').toLowerCase();
-  const raw=CLOZE_BY_AGENT[who]||"Complète : numéro { _ }";
-  document.getElementById('clozeText').textContent=raw.replace("{ _ }","_____");
-  const msg=document.getElementById('clozeMsg');
-  document.getElementById('checkCloze').onclick=()=>{
-    const v=(document.getElementById('clozeAnswer').value||"").trim();
-    if(v==="750"){document.getElementById('plan').classList.add('hidden');document.getElementById('finale').classList.remove('hidden');}
-    else{msg.textContent="Mauvaise réponse.";msg.classList.remove('hidden');}
-  };
-}
 </script>
 </body>
 </html>

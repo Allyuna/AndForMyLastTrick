@@ -308,7 +308,7 @@ function buildPattern(agent){
   toPlan.onclick=()=>{ preparePlan(agent); };
 }
 
-/* === Plan + Validation (code attendu 750) === */
+/* === Plan + Validation (code attendu 740) === */
 function preparePlan(agent){
   document.getElementById("pattern").classList.add("hidden");
   document.getElementById("plan").classList.remove("hidden");
@@ -317,7 +317,7 @@ function preparePlan(agent){
   const msg = document.getElementById("clozeMsg");
   document.getElementById("checkCloze").onclick = ()=>{
     const v = (document.getElementById("clozeAnswer").value||"").trim().toLowerCase();
-    if(v === "750"){
+    if(v === "740"){
       document.getElementById("plan").classList.add("hidden");
       document.getElementById("finale").classList.remove("hidden");
     } else {

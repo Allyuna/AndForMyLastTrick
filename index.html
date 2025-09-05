@@ -69,7 +69,7 @@
       </div>
       <div>
         <label for="startDate">Date d’arrivée</label>
-        <input id="startDate" type="text" placeholder="ex : 12/10/2023 · 12 octobre 2023 · 12 oct 23">
+        <input id="startDate" type="text" placeholder="ex : 12/02/1999 · 12 fevrier 1999 · 12 fev 99">
         <div class="hint">Formats FR/EN ok. Accents tolérés.</div>
       </div>
       <div>
@@ -115,7 +115,7 @@
   <!-- Écran 4 -->
   <section id="plan" class="card hidden">
     <h3>Déplacements d’Agents</h3>
-    <p class="mono">Tracez un trait droit d’un déplacement à l’autre, même si ça traverse les murs.</p>
+    <p class="mono">Tracez un trait droit d’un déplacement à l’autre, même si ça traverse les murs.Commencer un nouveau tracé pour chaque Agent. </p>
     <img src="assets/Plan.jpg" style="width:100%;max-width:700px;border:1px solid #1f2937;border-radius:10px">
     <div class="divider"></div>
     <p id="clozeText" class="mono"></p>
@@ -137,13 +137,13 @@
 <script>
 /* === Données Agents (dates + spécialités) === */
 const AGENTS = {
-  sam:{label:"Sam",start:"2023-10-12",photo:"assets/sam.jpg",cover:"S.A.M",spec:"Créatrice de contenus hors norme & terreur de Wake Up",dig:"Sous le bureau du GM, côté gauche."},
-  camille:{label:"Camille",start:"2022-09-08",photo:"assets/camille.jpg",cover:"Miss Rey",spec:"Graphiste Phasme avec esprit vif, très cOnFiDeNtiEL",dig:"Sous le zip de la chaise n°2."},
-  maxence:{label:"Maxence",start:"2025-03-29",photo:"assets/maxence.jpg",cover:"M.A.X",spec:"Futur Spielberg moderne, dit souvent AGENT C'EST CHARLES",dig:"Tiroir 3, salle préférée."},
-  juliette:{label:"Juliette",start:"2024-08-24",photo:"assets/juliette.jpg",cover:"Juju",spec:"Spécialiste sous couverture...Maline..trop maline..",dig:"Enveloppe collée sous le comptoir."},
-  romane:{label:"Romane",start:"2025-05-09",photo:"assets/romane.jpg",cover:"Roro",spec:"Bout en train, Répartie aiguisée comme un couteau et metteuse d'ambiance",dig:"Derrière l’affiche de la salle favorite."},
-  clemence:{label:"Clémence",start:"2025-05-09",photo:"assets/clemence.jpg",cover:"C.L.E.M",spec:"Spécialiste des interventions Psychose et des rébus sur post it",dig:"Sous le zip de la chaise n°4."},
-  nat:{label:"Nat",start:"2017-02-24",photo:"assets/nat.jpg",cover:"Cheffe",spec:"Point fort : cerveau de l'opération · Point faible : les margaritas",dig:"Enveloppe sous le bureau technique."}
+  sam:{label:"Sam",start:"2023-10-12",photo:"assets/sam.jpg",cover:"S.A.M",spec:"Créatrice de contenus hors norme & terreur de Wake Up",dig:"6ème emplacement du meuble à droite de la porte bureau GM"},
+  camille:{label:"Camille",start:"2022-09-08",photo:"assets/camille.jpg",cover:"Miss Rey",spec:"Graphiste Phasme avec esprit vif, très cOnFiDeNtiEL",dig:"Dans l'ancien Carnet de Jane du local technique de ta salle pref"},
+  maxence:{label:"Maxence",start:"2025-03-29",photo:"assets/maxence.jpg",cover:"M.A.X",spec:"Futur Spielberg moderne, dit souvent AGENT C'EST CHARLES",dig:"Trousse de secours"},
+  juliette:{label:"Juliette",start:"2024-08-24",photo:"assets/juliette.jpg",cover:"Juju",spec:"Spécialiste sous couverture...Maline..trop maline..",dig:"Dans un des canapés carrés"},
+  romane:{label:"Romane",start:"2025-05-09",photo:"assets/romane.jpg",cover:"Roro",spec:"Bout en train, Répartie aiguisée comme un couteau et metteuse d'ambiance",dig:"Dans la grosse cafetière de la réserve"},
+  clemence:{label:"Clémence",start:"2025-05-09",photo:"assets/clemence.jpg",cover:"C.L.E.M",spec:"Spécialiste des interventions Psychose et des rébus sur post it",dig:"Dans le tiroir à lunettes coeurs dans le bureau GM"},
+  nat:{label:"Nat",start:"2017-02-24",photo:"assets/nat.jpg",cover:"Cheffe",spec:"Point fort : cerveau de l'opération · Point faible : les margaritas",dig:"Dans un casier de ton bureau"}
 };
 
 /* === Textes à trous / Banques de mots par binômes === */
@@ -166,26 +166,26 @@ const CLOZE_TEXTS = {
 
 /* === Banque de questions === */
 const QUESTION_BANK = [
-  {q:"Date de création de l’Agence Wake Up ?",answers:["24/02/2017","24-02-2017","24 02 2017","24 fevrier 2017","24 février 2017","24 february 2017","feb 24 2017","2017-02-24"],norm:"2017-02-24"},
-  {q:"Première salle ouverte à Wake Up ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"]},
-  {q:"Quelle salle a été récompensée aux Escape Awards en 2019 ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"]},
+  {q:"Date de création de l’Agence Wake Up ? Format jour mois année",answers:["24/02/2017","24-02-2017","24 02 2017","24 fevrier 2017","24 février 2017","24 february 2017","feb 24 2017","2017-02-24"],norm:"2017-02-24"},
+  {q:"Première salle ouverte à Wake Up ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood", "AB", "ab"]},
+  {q:"Quelle salle a été récompensée aux Escape Awards en 2019 ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood","AB", "ab"]},
   {q:"Nombre d’années de service de l’Agent A ?",answers:["6","six"]},
   {q:"Logiciel utilisé pour les plannings ?",answers:["4escape"]},
   {q:"Vrai ou Faux – Axomama est la déesse de la pomme de terre pour les Incas ?",answers:["vrai","true"]},
   {q:"Vrai ou Faux – Une joueuse s’est déjà cassé une dent dans Psychose ?",answers:["vrai","true"]},
   {q:"Vrai ou Faux – Un joueur a déjà fait pipi dans Inti Kancha ?",answers:["vrai","true"]},
   {q:"Vrai ou Faux – On a eu au moins 3 demandes en mariage à l’Agence ?",answers:["vrai","true"]},
-  {q:"Combien d’Agents au total ont été recrutés depuis le début de l’Agence ?",answers:["48"]},
-  {q:"Quelle mission a Agent A joué pour de son entretien d'embauche ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"]},
+  {q:"Combien d’Agents au total ont été recrutés depuis le début de l’Agence ? L'Agent Natacha détient l'information précise",answers:["48"]},
+  {q:"Quelle mission a Agent A joué pour de son entretien d'embauche ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood","AB", "ab"]},
   {q:"En quelle année est sorti le film Escape Room au cinéma ?",answers:["2019"]},
-  {q:"Dans quelle salle es-tu propice à t’enfermer pendant ton rangement ?",answers:["protocole vegas","vegas"]},
-  {q:"Quel est le pays de naissance des Escape Games ?",answers:["japon","japan"]},
-  {q:"Quelle est la salle la plus réservée depuis l’ouverture de Wake Up ?",answers:["contagion"]},
+  {q:"Dans quelle salle es-tu propice à t’enfermer pendant ton rangement ?",answers:["protocole vegas","vegas", "PV","pv"]},
+  {q:"Quel est le pays de naissance des Escape Games ?",answers:["japon","japan","Japon"]},
+  {q:"Quelle est la salle la plus réservée depuis l’ouverture de Wake Up ?",answers:["contagion","Contagion","Conta"]},
   {q:"Qui a le cri le plus terrifiant de Wake Up ?",answers:["sam","agent sam","camille bahougne"]},
-  {q:"Quelle est la salle la plus longue à ranger ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood"]},
-  {q:"Quelle est la salle où les joueurs pètent le plus ?",answers:["psychose"]},
-  {q:"Dans quelle salle y a-t-il des thermos coupées en deux pour faire des charnières sur le coffre géant ?",answers:["protocole vegas","vegas"]},
-  {q:"Quelle salle contient le plus de codes à chiffres ?",answers:["contagion"]},
+  {q:"Quelle est la salle la plus longue à ranger ?",answers:["l'affaire blackwood","affaire blackwood","blackwood","laffaire blackwood","AB","ab"]},
+  {q:"Quelle est la salle où les joueurs pètent le plus ?",answers:["psychose","Psychose"]},
+  {q:"Dans quelle salle y a-t-il des thermos coupées en deux pour faire des charnières sur le coffre géant ?",answers:["protocole vegas","vegas","PV","pv"]},
+  {q:"Quelle salle contient le plus de codes à chiffres ?",answers:["contagion","Contagion","Conta","conta"]},
   {q:"1er avril 2023, l’agent Victor a annoncé de fausses salles. Donne le nom d’une d’entre elles.",answers:["protocole vegan","contafion","l'affaire blackpoule","laffaire blackpoule","arthrose","et et la plancha","et la plancha"]}
 ];
 

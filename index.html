@@ -64,7 +64,7 @@
           <option value="juliette">Juliette</option>
           <option value="romane">Romane</option>
           <option value="clemence">Clémence</option>
-          <option value="nat">Nat</option>
+          <option value=""></option>
         </select>
       </div>
       <div>
@@ -364,7 +364,7 @@ function preparePlan(agent){
 
     document.getElementById("natFinalBtn").onclick = ()=>{
       const v = (natFinal.value||"").trim();
-      if(v === "740"){
+      if(v === "470"){
         natFlow.classList.add("hidden");
         document.getElementById("finale").classList.remove("hidden");
       } else {
